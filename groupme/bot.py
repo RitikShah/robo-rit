@@ -30,6 +30,8 @@ class Bot:
 
 		self._prefix = prefix
 
+		self.send_message('Successfully Booted!')
+
 	@app.route('/', methods=['POST'])
 	def webhook(self):
 		''' Receives the raw json from each message (POST from groupme callback URL) '''
@@ -37,18 +39,18 @@ class Bot:
 		data = request.get_json()
 
 		# Ignore message if sent by bot
-		if isBot(data['name']):
-			log(f'Received {self._name} Message')
+		if self.isBot(data['name']):
+			self.log(f'Received {self._name} Message')
 
 			return "ok", 200
 
-		log(f'Received {data}')
+		self.log(f'Received {data}')
 
-		success = received(data)
+		success = self.received(data)
 		if success == -1:
-			invalid_command(data)
+			self.invalid_command(data)
 		else:
-			log(f'Successfully executed {success}')
+			self.log(f'Successfully executed {success}')
 
 		return "ok", 200
 
@@ -89,7 +91,7 @@ class Bot:
 		self._commands[name or func.__name__] = func
 		return func(*args, **kwargs)
 
-	def send_message(msg):
+	def send_message(self, msg):
 		''' Sends a message to the groupchat through POST '''
 
 		data = {
@@ -97,14 +99,14 @@ class Bot:
 			'text'   : msg
 		}
 		
-		log(f'Sending: {data} at {url}')
+		self.log(f'Sending: {data} at {url}')
 		requests.post(url, data)
 
 	def invalid_command(self, data):
 		''' Sends a message notifying the user of an invalid command '''
 
 		cmd = msg.split(' ')[0]
-		send_message(f'{cmd} is an invalid command.')
+		self.send_message(f'{cmd} is an invalid command.')
 
 	def isBot(self, author):
 		return author == self._name
