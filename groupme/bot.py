@@ -1,22 +1,22 @@
 import os
 import sys
 import json
-import requests
 import functools
 
-from flask import flask, request
-from decorators import decorator
+import requests
+
+from flask import Flask, request
+from decorator import decorator
 
 from .exceptions import ConfigException, GroupMeException
 
 url  = 'https://api.groupme.com/v3/bots/post'
+app = Flask(__name__)
 
 class Bot:
 	''' Class to define a single groupme bot '''
 
 	def __init__(self, prefix='.'):
-		self._app = Flask(__name__)
-
 		try: self._id = os.getenv('GROUPME_BOT_ID')
 		except Exception:
 			raise ConfigException('Missing Bot ID. Run Heroku Config: Set GROUPME_BOT_ID=[bot-id-here]')
@@ -79,7 +79,7 @@ class Bot:
 
 	# Adapted from https://github.com/angrox/groupme-bot/blob/master/groupmebot.py	
 	@decorator
-	def command(self, func, hidden=false, name=None, *args, **kwargs):
+	def command(self, func, hidden=False, name=None, *args, **kwargs):
 		""" Decorator for bot command functions. Only runs functions when command is called """
 		
 		setattr(func, '_command', True)
