@@ -1,4 +1,4 @@
-from groupme.bot import Bot, url
+from groupme.bot import Bot, url, app
 
 test = Bot()
 
