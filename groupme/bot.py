@@ -11,7 +11,6 @@ from decorator import decorator
 from .exceptions import ConfigException, GroupMeException
 
 url  = 'https://api.groupme.com/v3/bots/post'
-app = Flask(__name__)
 
 class Bot:
 	''' Class to define a single groupme bot '''
@@ -32,12 +31,9 @@ class Bot:
 
 		self.send_message('Successfully Booted!')
 
-	@app.route('/', methods=['POST'])
-	def webhook(self):
+	def webhook(self, data):
 		''' Receives the raw json from each message (POST from groupme callback URL) '''
 		
-		data = request.get_json()
-
 		# Ignore message if sent by bot
 		if self.isBot(data['name']):
 			self.log(f'Received {self._name} Message')

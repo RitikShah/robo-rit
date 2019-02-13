@@ -1,7 +1,13 @@
-from groupme.bot import Bot, url, app
+from flask import Flask, request
+from groupme.bot import Bot, url
 
-test = Bot()
+app = Flask(__name__)
+bot = Bot()
 
-@test.command(name=test)
+@app.route('/', methods=['POST'])
+def webhook(self):
+	bot.webhook(data=request.get_json())
+
+@bot.command(name='test')
 def test():
 	send_message('Success!')
