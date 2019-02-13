@@ -14,6 +14,6 @@ def test():
 	bot.send_message('Success!')
 
 @bot.listener()
-def test2(msg)
+def test2(msg):
 	print(msg)
 	bot.send_message(f'HELP ME YUYU {msg}')
