@@ -36,7 +36,7 @@ class Bot:
 		
 		# Ignore message if sent by bot
 		if self.isBot(data['name']):
-			self.log(f'Received {self._name} Message')
+			self.log(f'Received {self._name} message')
 
 			return "ok", 200
 

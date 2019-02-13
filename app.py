@@ -5,9 +5,15 @@ app = Flask(__name__)
 bot = Bot()
 
 @app.route('/', methods=['POST'])
-def webhook(self):
+def webhook():
 	bot.webhook(data=request.get_json())
 
-@bot.command(name='test')
+@bot.command()
 def test():
-	send_message('Success!')
+	print('lol cool')
+	bot.send_message('Success!')
+
+@bot.listener()
+def test2(msg)
+	print(msg)
+	bot.send_message(f'HELP ME YUYU {msg}')
