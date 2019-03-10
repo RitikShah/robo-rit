@@ -9,12 +9,12 @@ def webhook():
 	data = request.get_json()
 	bot.webhook(data=data)
 
-@bot.command()
+@bot.command
 def test():
 	print('lol cool')
 	bot.send_message('Success!')
 
-@bot.listener()
+@bot.listener
 def test2(msg):
 	print(msg)
 	bot.send_message(f'HELP ME YUYU {msg}')
