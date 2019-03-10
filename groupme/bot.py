@@ -1,12 +1,9 @@
 import os
 import sys
 import json
-import functools
-
 import requests
 
 from flask import Flask, request
-from decorator import decorator
 
 from .exceptions import ConfigException, GroupMeException
 
@@ -71,16 +68,14 @@ class Bot:
 			# No command found
 			return -1
 
-	@decorator
-	def listener(self, cls, func, *args, **kwargs):
+	def listener(self, func):
 		""" Decorator for functions to listen to each message """
 		
 		self._listeners[func.__name__] = func
-		return func(cls, *args, **kwargs)
+		return func
 
 	# Adapted from https://github.com/angrox/groupme-bot/blob/master/groupmebot.py	
-	@decorator
-	def command(self, cls, func, hidden=False, name=None, *args, **kwargs):
+	def command(self, func, hidden=False, name=None):
 		""" Decorator for bot command functions. Only runs functions when command is called """
 		
 		setattr(func, '_command', True)
@@ -88,7 +83,7 @@ class Bot:
 		setattr(func, '_command_name', name or func.__name__)
 
 		self._commands[name or func.__name__] = func
-		return func(cls, *args, **kwargs)
+		return func
 
 	def send_message(self, msg):
 		''' Sends a message to the groupchat through POST '''
