@@ -16,11 +16,13 @@ class Bot:
 	''' Class to define a single groupme bot '''
 
 	def __init__(self, prefix='.'):
-		try: self._id = os.getenv('GROUPME_BOT_ID')
+		try:
+			self._id = os.getenv('GROUPME_BOT_ID')
 		except Exception:
 			raise ConfigException('Missing Bot ID. Run Heroku Config: Set GROUPME_BOT_ID=[bot-id-here]')
 
-		try: self._name = os.getenv('GROUPME_BOT_NAME')
+		try:
+			self._name = os.getenv('GROUPME_BOT_NAME')
 		except Exception:
 			raise ConfigException('Missing Bot Name. Run Heroku Config: Set GROUPME_BOT_NAME=[bot-name-here]')
 
@@ -33,6 +35,7 @@ class Bot:
 
 	def webhook(self, data):
 		''' Receives the raw json from each message (POST from groupme callback URL) '''
+		self.log('test')
 		
 		# Ignore message if sent by bot
 		if self.isBot(data['name']):
@@ -69,15 +72,15 @@ class Bot:
 			return -1
 
 	@decorator
-	def listener(self, func, *args, **kwargs):
+	def listener(self, cls, func, *args, **kwargs):
 		""" Decorator for functions to listen to each message """
 		
 		self._listeners[func.__name__] = func
-		return func(*args, **kwargs)
+		return func(cls, *args, **kwargs)
 
 	# Adapted from https://github.com/angrox/groupme-bot/blob/master/groupmebot.py	
 	@decorator
-	def command(self, func, hidden=False, name=None, *args, **kwargs):
+	def command(self, cls, func, hidden=False, name=None, *args, **kwargs):
 		""" Decorator for bot command functions. Only runs functions when command is called """
 		
 		setattr(func, '_command', True)
@@ -85,7 +88,7 @@ class Bot:
 		setattr(func, '_command_name', name or func.__name__)
 
 		self._commands[name or func.__name__] = func
-		return func(*args, **kwargs)
+		return func(cls, *args, **kwargs)
 
 	def send_message(self, msg):
 		''' Sends a message to the groupchat through POST '''

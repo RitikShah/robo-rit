@@ -6,7 +6,8 @@ bot = Bot()
 
 @app.route('/', methods=['POST'])
 def webhook():
-	bot.webhook(data=request.get_json())
+	data = request.get_json()
+	bot.webhook(data=data)
 
 @bot.command()
 def test():
