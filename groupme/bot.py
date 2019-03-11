@@ -50,7 +50,6 @@ class Bot:
 
 		return "ok", 200
 
-	@decorators.debug
 	def received(self, data):
 		''' Forward message to listeners and commands '''
 		
@@ -65,7 +64,7 @@ class Bot:
 
 			for command in self._commands.values():
 				if command._command_name == words[0]:
-					command(words[1:])
+					command()
 					return command.getattr(command._command_name)
 
 			# No command found

@@ -13,9 +13,9 @@ def webhook():
 @bot.command
 def test():
 	print('lol cool')
-	bot.send_message('Success!')
+	bot.send_message('Test Complete')
 
-@bot.listener
-def test2(msg):
-	print(msg['text'])
-	bot.send_message(f"HELP ME YUYU {msg['text']}")
+@bot.command
+def memes():
+	print('lol cool 2')
+	bot.send_message('Yuyu is a big meme')
