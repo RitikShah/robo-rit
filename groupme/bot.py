@@ -14,15 +14,16 @@ class Bot:
 	''' Class to define a single groupme bot '''
 
 	def __init__(self, prefix='.'):
-		try:
-			self._id = os.getenv('GROUPME_BOT_ID')
+		self._id = os.getenv('GROUPME_BOT_ID')
+		self._name = os.getenv('GROUPME_BOT_NAME')
+
+		'''
 		except Exception:
 			raise ConfigException('Missing Bot ID. Run Heroku Config: Set GROUPME_BOT_ID=[bot-id-here]')
-
-		try:
-			self._name = os.getenv('GROUPME_BOT_NAME')
+			
 		except Exception:
 			raise ConfigException('Missing Bot Name. Run Heroku Config: Set GROUPME_BOT_NAME=[bot-name-here]')
+		'''
 
 		self._listeners = dict()
 		self._commands = dict()
@@ -33,10 +34,9 @@ class Bot:
 
 	def webhook(self, data):
 		''' Receives the raw json from each message (POST from groupme callback URL) '''
-		self.log('test')
 		
 		# Ignore message if sent by bot
-		if self.isBot(data['name']):
+		if self.isBot(data):
 			self.log(f'Received {self._name} message')
 			return "ok", 200
 
@@ -50,13 +50,16 @@ class Bot:
 
 		return "ok", 200
 
+	@decorators.debug
 	def received(self, data):
 		''' Forward message to listeners and commands '''
 		
 		if data['text'][0] != self._prefix: # only to listeners if not a bot command
-			for listener in self._listeners:
+			print('listen')
+			for listener in self._listeners.values():
 				listener(data)
 		else:
+			print('cmd')
 			msg = data['text'][1:] # exclude prefix
 			words = msg.split(' ')
 
@@ -75,6 +78,7 @@ class Bot:
 		return func
 
 	# Adapted from https://github.com/angrox/groupme-bot/blob/master/groupmebot.py	
+	@decorators.debug
 	def command(self, func, hidden=False, name=None):
 		""" Decorator for bot command functions. Only runs functions when command is called """
 		
@@ -102,8 +106,8 @@ class Bot:
 		cmd = msg.split(' ')[0]
 		self.send_message(f'{cmd} is an invalid command.')
 
-	def isBot(self, author):
-		return author == self._name
+	def isBot(self, data):
+		return data['sender_type'] == 'bot'
 
 	# Todo: use logging module
 	def log(self, msg):

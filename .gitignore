@@ -3,3 +3,5 @@ debug-setup.sh
 local.sh
 **/.DS_Store
 __pycache__
+.pytest_cache
+test_before_deploy.py
