@@ -6,6 +6,7 @@ import requests
 from flask import Flask, request
 
 from .exceptions import ConfigException, GroupMeException
+from .utils import decorators
 
 url  = 'https://api.groupme.com/v3/bots/post'
 
@@ -30,6 +31,7 @@ class Bot:
 
 		self.send_message('Successfully Booted!')
 
+	@decorators.debug
 	def webhook(self, data):
 		''' Receives the raw json from each message (POST from groupme callback URL) '''
 		self.log('test')
@@ -50,6 +52,7 @@ class Bot:
 
 		return "ok", 200
 
+	@decorators.debug
 	def received(self, data):
 		''' Forward message to listeners and commands '''
 		
@@ -68,6 +71,7 @@ class Bot:
 			# No command found
 			return -1
 
+	@decorators.debug
 	def listener(self, func):
 		""" Decorator for functions to listen to each message """
 		
@@ -75,6 +79,7 @@ class Bot:
 		return func
 
 	# Adapted from https://github.com/angrox/groupme-bot/blob/master/groupmebot.py	
+	@decorators.debug
 	def command(self, func, hidden=False, name=None):
 		""" Decorator for bot command functions. Only runs functions when command is called """
 		
