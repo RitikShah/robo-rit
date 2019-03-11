@@ -19,4 +19,4 @@ def test():
 @bot.listener
 def test2(msg):
 	print(msg['text'])
-	bot.send_message(f'HELP ME YUYU {msg['text']}')
+	bot.send_message(f"HELP ME YUYU {msg['text']}")
