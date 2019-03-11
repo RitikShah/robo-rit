@@ -63,7 +63,7 @@ class Bot:
 			msg = data['text'][1:] # exclude prefix
 			words = msg.split(' ')
 
-			for command in self._commands:
+			for command in self._commands.values():
 				if command._command_name == words[0]:
 					command(words[1:])
 					return command.getattr(command._command_name)
