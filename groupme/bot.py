@@ -31,7 +31,6 @@ class Bot:
 
 		self.send_message('Successfully Booted!')
 
-	@decorators.debug
 	def webhook(self, data):
 		''' Receives the raw json from each message (POST from groupme callback URL) '''
 		self.log('test')
@@ -39,7 +38,6 @@ class Bot:
 		# Ignore message if sent by bot
 		if self.isBot(data['name']):
 			self.log(f'Received {self._name} message')
-
 			return "ok", 200
 
 		self.log(f'Received {data}')
@@ -52,11 +50,10 @@ class Bot:
 
 		return "ok", 200
 
-	@decorators.debug
 	def received(self, data):
 		''' Forward message to listeners and commands '''
 		
-		if data['text'][0] != prefix: # only to listeners if not a bot command
+		if data['text'][0] != self._prefix: # only to listeners if not a bot command
 			for listener in self._listeners:
 				listener(data)
 		else:
@@ -71,7 +68,6 @@ class Bot:
 			# No command found
 			return -1
 
-	@decorators.debug
 	def listener(self, func):
 		""" Decorator for functions to listen to each message """
 		
@@ -79,7 +75,6 @@ class Bot:
 		return func
 
 	# Adapted from https://github.com/angrox/groupme-bot/blob/master/groupmebot.py	
-	@decorators.debug
 	def command(self, func, hidden=False, name=None):
 		""" Decorator for bot command functions. Only runs functions when command is called """
 		
