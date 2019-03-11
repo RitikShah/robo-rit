@@ -4,12 +4,11 @@ from groupme.utils import decorators
 from groupme.bot import Bot, url
 
 app = Flask(__name__)
-bot = Bot()
+bot = Bot(':')
 
 @app.route('/', methods=['POST'])
 def webhook():
-	data = request.get_json()
-	return bot.webhook(data=data)
+	return bot.webhook(data=request.get_json())
 
 @bot.command
 def test():

@@ -64,9 +64,9 @@ class Bot:
 			words = msg.split(' ')
 
 			for command in self._commands:
-				if command.getattr(_command_name) == words[0]:
+				if command._command_name == words[0]:
 					command(words[1:])
-					return command.getattr(_command_name)
+					return command.getattr(command._command_name)
 
 			# No command found
 			return -1
